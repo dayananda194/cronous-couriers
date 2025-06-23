@@ -7,6 +7,7 @@ import org.syncron.cronouscouriers.enums.PackageType;
 
 @Getter
 @Setter
+
 public class Package {
 
     private final String id;
