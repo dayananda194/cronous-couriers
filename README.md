@@ -40,6 +40,9 @@ Jump to:
   - Download the [Gradle build system](https://gradle.org/releases/)
 - IDE  
 
+## TechStack Used 
+- Java , Spring Boot
+
 ### Local Setup
 1. Clone the repository:
    
