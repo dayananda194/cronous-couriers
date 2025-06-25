@@ -5,7 +5,7 @@
 An intelligent dispatch system for time-sensitive package deliveries, prioritizing urgent packages and optimizing rider assignments.
 
 Jump to:
-- [Installation](https://github.com/dayananda194/cronous-couriers/new/main?filename=README.md#local-setup)
+- [Local SetUp](https://github.com/dayananda194/cronous-couriers?tab=readme-ov-file#local-setup)
 
   
 ## 📌 Features
