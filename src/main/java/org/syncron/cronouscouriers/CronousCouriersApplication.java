@@ -32,7 +32,6 @@ public class CronousCouriersApplication {
 		while(true){
 
 			printMenu();
-
 			String option = scanner.nextLine();;
 			int optionNumber=-1;
 			try{
@@ -94,7 +93,7 @@ public class CronousCouriersApplication {
             \nMenu:
             1. Add Rider       2. Place Order
             3. Update Rider Status   4. Assign Package
-            5. Record Pickup   6. Record Delivery Success
+            5. Record Package Pickup   6. Record Delivery Success
             7. Record Delivery Failure    8. Get Packages By a Rider
             9. Get Late Express Packages 
             0. Exit
@@ -244,7 +243,8 @@ public class CronousCouriersApplication {
 
 		SpringApplication.run(CronousCouriersApplication.class, args);
 
-		new CronousCouriersApplication().run();
+		CronousCouriersApplication cronousCouriersApplication = new CronousCouriersApplication();
+		cronousCouriersApplication.run();
 
 	}
 
