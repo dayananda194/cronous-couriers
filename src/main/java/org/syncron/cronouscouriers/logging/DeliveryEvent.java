@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DeliveryEvent {
+public  class DeliveryEvent {
     String packageId;
     EventType eventType; // PICKUP or DELIVERY
     long timestamp;

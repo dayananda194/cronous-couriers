@@ -21,4 +21,10 @@ public class Assignment {
         this.riderId = riderId;
         this.status = AssignmentStatus.ASSIGNED;
     }
+
+    @Override
+    public String toString(){
+
+        return "[ Id : " + id + " .Package Id : " + packageId + ", Rider Id : " + riderId + ", PickUpTime : " +pickupTime + ", DeliveryTime : " +deliveryTime + ", Assigment Status : " + status + " ]";
+    }
 }

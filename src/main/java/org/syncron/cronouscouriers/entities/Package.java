@@ -29,4 +29,10 @@ public class Package {
         this.destination = destination;
     }
 
+    @Override
+    public String toString() {
+
+        return "[ Id : "+id+", Type:"+type+" ,OrderTime: "+orderTime+" ,isFragile : " + isFragile + " ,Status :"  + status + ", Destination : " +destination+"]";
+    }
+
 }

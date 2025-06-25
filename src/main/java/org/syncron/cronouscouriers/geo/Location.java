@@ -15,4 +15,10 @@ public class Location {
         this.longitude = longitude;
     }
 
+    @Override
+    public String toString(){
+
+        return ",[ Latitude : "+ latitude + " Longitude : " + longitude +"] ";
+    }
+
 }

@@ -22,4 +22,10 @@ public class Rider {
         this.currentLocation = location;
         this.status = RiderStatus.AVAILABLE;
     }
+
+    @Override
+    public String toString(){
+
+        return "[ Id : "+id+",Rider Status :"+status+",Reliability Rating : "+reliabilityRating + ", Can Handle Fragile :" + canHandleFragile + " " +currentLocation.toString() +" ]";
+    }
 }
