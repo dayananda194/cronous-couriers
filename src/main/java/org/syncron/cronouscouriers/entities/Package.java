@@ -32,7 +32,7 @@ public class Package {
     @Override
     public String toString() {
 
-        return "[ Id : "+id+", Type:"+type+" ,OrderTime: "+orderTime+" ,isFragile : " + isFragile + " ,Status :"  + status + ", Destination : " +destination+"]";
+        return "[ Id : "+id+", Type:"+type+" ,OrderTime: "+orderTime+" ,isFragile : " + isFragile +",Deadline : "+deadline +" ,Status :"  + status + ", Destination : " +destination+"]";
     }
 
 }

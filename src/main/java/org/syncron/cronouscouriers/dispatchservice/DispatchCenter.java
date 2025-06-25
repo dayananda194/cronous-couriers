@@ -54,6 +54,14 @@ public class DispatchCenter {
         allPackages.put(pkg.getId(), pkg);
         System.out.println("Package Created Successfully : " + pkg.toString() );
         PackageDeliveryAudit.logStatusChange(pkg.getId(), null, pkg.getStatus(),System.currentTimeMillis());
+        Optional<Assignment> newAssignment = assignPackage();
+        System.out.println("Trying to assign the package to the Riders.........Is Package Assigned : "+newAssignment.isPresent());
+        if (newAssignment.isPresent()) {
+            System.out.println("Newly Assigned Package : " + newAssignment.get().toString());
+        }else{
+            System.out.println("Unable to assign Package due to shortage of riders  ");
+        }
+
     }
 
     public void updateRiderStatus(String riderId, RiderStatus newStatus) {
@@ -140,11 +148,13 @@ public class DispatchCenter {
         PackageDeliveryAudit.logDeliveryEvent(pkg.getId(), EventType.DELIVERY,System.currentTimeMillis(),isOnTime);
         PackageDeliveryAudit.logStatusChange(pkg.getId(), PackageStatus.IN_TRANSIT, PackageStatus.DELIVERED,System.currentTimeMillis());
 
-        System.out.println("Package Delivery Successfully : " + pkg.toString());
+        System.out.println("Package Delivered Successfully : " + pkg.toString());
         Optional<Assignment> newAssignment = assignPackage();
         System.out.println("Rider is Available , Trying to assign new package.... Is Package Assigned : " + newAssignment.isPresent()  );
         if(newAssignment.isPresent()) {
             System.out.println("Assigned Package is : " + newAssignment.get().toString());
+        }else {
+            System.out.println("Unable to assign Package due to shortage of Packages  ");
         }
         // Rider is now available, try to assign another package
 
@@ -162,7 +172,11 @@ public class DispatchCenter {
         System.out.println("Trying to Assign new Package Since Rider is Added ....... Is Package Assigned : " + newAssignment.isPresent() );
         if(newAssignment.isPresent()) {
             System.out.println("Newly Assigned Package is : " + newAssignment.get().toString());
+        }else {
+            System.out.println("Unable to assign new package due to shortage of relavant Packages");
         }
+        System.out.println("List of Riders are : ");
+        riders.values().stream().forEach(System.out::println);
     }
 
     public void recordDeliveryFailure(String assignmentId) {

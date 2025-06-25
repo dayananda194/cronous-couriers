@@ -33,9 +33,13 @@ public class CronousCouriersApplication {
 
 			printMenu();
 
-			String option = scanner.nextLine();
-			int optionNumber = Integer.parseInt(option);
-
+			String option = scanner.nextLine();;
+			int optionNumber=-1;
+			try{
+				optionNumber = Integer.parseInt(option); // if the user enters the strings/characters instead of an integer , then it should display the error instead of server stop
+			}catch (Exception e){
+				System.out.println("Invalid option number" + e.getMessage());
+			}
 			switch(optionNumber){
 
 				case 1:
@@ -76,7 +80,7 @@ public class CronousCouriersApplication {
 					System.out.println("Exiting system...");
 					return;
 				default:
-						System.out.println("Invalid option");
+						System.out.println("Please enter valid option");
 
 			}
 
@@ -146,6 +150,8 @@ public class CronousCouriersApplication {
 
 	private void updateRiderStatus() {
 		try {
+
+			printRiders();
 			System.out.print("\nUpdate Status\nRider ID, New_Status (AVAILABLE/BUSY/OFFLINE): ");
 			String[] input = scanner.nextLine().split(",");
 			dispatchCenter.updateRiderStatus(
@@ -172,6 +178,7 @@ public class CronousCouriersApplication {
 
 	private void recordPickup() {
 		try {
+			printAssigments();
 			System.out.print("\nRecord Pickup\nAssignment ID: ");
 			dispatchCenter.recordPickup(scanner.nextLine());
 		} catch (Exception e) {
@@ -182,6 +189,7 @@ public class CronousCouriersApplication {
 
 	private void recordDelivery() {
 		try {
+			printAssigments();
 			System.out.print("\nRecord Delivery\nAssignment ID, On Time? (true/false): ");
 			String[] input = scanner.nextLine().split(",");
 			dispatchCenter.recordDelivery(input[0].trim(), Boolean.parseBoolean(input[1].trim()));
@@ -193,6 +201,7 @@ public class CronousCouriersApplication {
 	private void recordFailure() {
 
 		try{
+			printAssigments();
 			System.out.print("\nRecord Delivery Failure\nAssignment ID : ");
 			String assigmentID = scanner.nextLine();
 			dispatchCenter.recordDeliveryFailure(assigmentID);
@@ -205,7 +214,7 @@ public class CronousCouriersApplication {
 
 	private void getPackagesDeliveredByRider(){
 
-		System.out.println("Available Drivers are : " + dispatchCenter.getRiders().keySet().stream().peek((rider)->{System.out.println(rider.toString());}));
+		printRiders();
 		System.out.println("Enter the driver ID : ");
 		String driverID = scanner.nextLine();
 		List<String> packageList = PackageDeliveryAudit.getPackagesDeliveredByRider(driverID,System.currentTimeMillis()-24*60*60*1000); // 24 hrs ago
@@ -215,12 +224,20 @@ public class CronousCouriersApplication {
 
 	private void getLateExpressPackages(){
 
-		System.out.println("Enter the last Hours H to find late express packages : ");
+		System.out.print("Enter the last Hours H to find late express packages : ");
 		long hours = scanner.nextLong();
 		System.out.println("Express Late Express Packages are : " + PackageDeliveryAudit.getLateExpressPackages(System.currentTimeMillis()-24*hours*60*1000));
 
 	}
+	private void printAssigments(){
+		System.out.println("*******List of Assigned Packages ******");
+		dispatchCenter.getAssignments().stream().forEach(System.out::println);
+	}
+	private void printRiders(){
+		System.out.println("******* List of Riders ******\n");
+	 dispatchCenter.getRiders().values().stream().forEach((rider)->{System.out.println(rider.toString());});
 
+	}
 
 	public static void main(String[] args) {
 
