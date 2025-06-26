@@ -2,11 +2,14 @@ package org.syncron.cronouscouriers.dispatchservice;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.syncron.cronouscouriers.entities.Assignment;
 import org.syncron.cronouscouriers.entities.Package;
 import org.syncron.cronouscouriers.entities.Rider;
+import org.syncron.cronouscouriers.enums.PackageStatus;
 import org.syncron.cronouscouriers.enums.PackageType;
 import org.syncron.cronouscouriers.enums.RiderStatus;
 import org.syncron.cronouscouriers.geo.Location;
+import org.syncron.cronouscouriers.logging.PackageDeliveryAudit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,11 +71,46 @@ public class DispatchCenterTest {
 
     }
 
+
+
     @Test
     void testUpdateRiderStatusWhenRiderNotAvailable(){
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,()->dispatchCenter.updateRiderStatus("UnknownRiderID",RiderStatus.OFFLINE));
         assertEquals("Rider not found", exception.getMessage());
+    }
+
+    @Test
+    void testPackageAssignedToRider(){
+
+        Package pkg = new Package("Offer-Letter", PackageType.EXPRESS,System.currentTimeMillis(),System.currentTimeMillis(),true,"Chittoor");
+        assertTrue(dispatchCenter.getAssignments().isEmpty()); // before the rider is available , the assigment should not happen
+        dispatchCenter.placeOrder(pkg);
+        Rider rider = new Rider("Dayananda", 0.9, false, new Location(0, 0));
+        dispatchCenter.addRider(rider);
+        assertTrue(dispatchCenter.getAssignments().isEmpty()); // since fragile items handled drivers are not available , no assigment should be done
+        Rider fragileRider = new Rider("Naveen", 0.9, true, new Location(0, 0));
+        dispatchCenter.addRider(fragileRider); // now the assigment should happen
+        System.out.println("List of assignments are "+ dispatchCenter.getAssignments());
+        assertFalse(dispatchCenter.getAssignments().isEmpty());
+        assertEquals(fragileRider.getStatus(),RiderStatus.BUSY);
+
+    }
+
+    @Test
+    void testRecordDelivery(){
+
+        Package pkg = new Package("Offer-letter", PackageType.EXPRESS,System.currentTimeMillis(),System.currentTimeMillis(),false,"Chittoor");
+        Rider rider = new Rider("Dayananda", 0.9, true, new Location(0, 0));
+        dispatchCenter.placeOrder(pkg);
+        dispatchCenter.addRider(rider);
+        Assignment assignment = dispatchCenter.getAssignments().get(0);
+        dispatchCenter.recordDelivery(assignment.getId(),false);
+        assertFalse(dispatchCenter.getAssignments().isEmpty());
+        assertEquals(PackageStatus.DELIVERED,pkg.getStatus());
+        assertEquals(RiderStatus.AVAILABLE,rider.getStatus()); // since there is no package , rider will be avaiable
+        assertEquals(PackageDeliveryAudit.deliveryEvents.size(),1);
+        assertFalse(PackageDeliveryAudit.statusChanges.isEmpty());
     }
 
 }

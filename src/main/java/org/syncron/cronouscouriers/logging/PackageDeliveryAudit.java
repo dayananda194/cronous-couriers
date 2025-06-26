@@ -10,12 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+@Getter
+@Setter
 public class PackageDeliveryAudit {
 
-    private static final List<StatusChangeRecord> statusChanges = new ArrayList<>();
-    private static final List<DeliveryEvent> deliveryEvents = new ArrayList<>();
-    private static final Map<String, PackageAssignment> packageAssignments = new HashMap<>();
+    public static final List<StatusChangeRecord> statusChanges = new ArrayList<>();
+    public static final List<DeliveryEvent> deliveryEvents = new ArrayList<>();
+    public static final Map<String, PackageAssignment> packageAssignments = new HashMap<>();
 
     // Record package status changes
     public static void logStatusChange(String packageId, PackageStatus oldStatus,
