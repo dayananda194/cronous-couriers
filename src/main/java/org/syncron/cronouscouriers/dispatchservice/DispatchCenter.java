@@ -201,7 +201,7 @@ public class DispatchCenter {
 
     // Reporting methods
 
-    public List<Package> getPendingPackages() {
+    public List<Package> getPendingPackages(int i) {
         return new ArrayList<>(pendingPackages);
     }
 
