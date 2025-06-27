@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.syncron.cronouscouriers.entities.Assignment;
 import org.syncron.cronouscouriers.entities.Package;
 import org.syncron.cronouscouriers.entities.Rider;
+import org.syncron.cronouscouriers.enums.AssignmentStatus;
 import org.syncron.cronouscouriers.enums.PackageStatus;
 import org.syncron.cronouscouriers.enums.PackageType;
 import org.syncron.cronouscouriers.enums.RiderStatus;
@@ -111,6 +112,35 @@ public class DispatchCenterTest {
         assertEquals(RiderStatus.AVAILABLE,rider.getStatus()); // since there is no package , rider will be avaiable
         assertEquals(PackageDeliveryAudit.deliveryEvents.size(),1);
         assertFalse(PackageDeliveryAudit.statusChanges.isEmpty());
+    }
+
+    @Test
+    void testRecordPickUp(){
+        Package pkg = new Package("Offer-Letter", PackageType.EXPRESS,System.currentTimeMillis(),System.currentTimeMillis(),false,"Chittoor");
+        Rider rider = new Rider("Dayananda", 0.9, true, new Location(0, 0));
+        dispatchCenter.placeOrder(pkg);
+        dispatchCenter.addRider(rider);
+        Assignment assignment = dispatchCenter.getAssignments().getFirst();
+        assertEquals(assignment.getStatus(), AssignmentStatus.ASSIGNED);
+        assertEquals(assignment.getPickupTime(),0);
+        dispatchCenter.recordPickup(assignment.getId());
+        assertEquals(pkg.getStatus(), PackageStatus.IN_TRANSIT);
+        assertNotEquals(0, assignment.getPickupTime());
+
+    }
+
+    @Test
+    void testRecordDeliveryFailure(){
+        Package pkg = new Package("Offer-letter", PackageType.EXPRESS,System.currentTimeMillis(),System.currentTimeMillis(),false,"Chittoor");
+        Rider rider = new Rider("Dayananda", 0.9, true, new Location(0, 0));
+        dispatchCenter.placeOrder(pkg);
+        dispatchCenter.addRider(rider);
+        Assignment assignment = dispatchCenter.getAssignments().getFirst();
+        assertEquals(assignment.getStatus(), AssignmentStatus.ASSIGNED);
+        dispatchCenter.recordDeliveryFailure(assignment.getId());
+        assertEquals(assignment.getStatus(), AssignmentStatus.FAILED);
+        assertEquals(rider.getStatus(), RiderStatus.AVAILABLE);
+
     }
 
 }

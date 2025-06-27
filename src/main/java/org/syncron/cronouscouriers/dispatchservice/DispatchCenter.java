@@ -199,19 +199,5 @@ public class DispatchCenter {
 
     }
 
-    // Reporting methods
-
-    public List<Package> getPendingPackages(int i) {
-        return new ArrayList<>(pendingPackages);
-    }
-
-    public List<Assignment> getActiveAssignments() {
-        return assignments.stream()
-                .filter(a -> a.getStatus() != AssignmentStatus.DELIVERED &&
-                        a.getStatus() != AssignmentStatus.FAILED)
-                .collect(Collectors.toList());
-    }
-
-
 
 }
